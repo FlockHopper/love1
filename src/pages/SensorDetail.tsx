@@ -23,6 +23,15 @@ export default function SensorDetail() {
   const [sensor, setSensor] = useState<Sensor | null>(null);
   const [alerts, setAlerts] = useState<Alert[]>([]);
 
+  // Verificar autenticação
+  useEffect(() => {
+    const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+    if (!isAuthenticated) {
+      navigate('/');
+      return;
+    }
+  }, [navigate]);
+
   useEffect(() => {
     const foundSensor = mockSensors.find(s => s.id === id);
     setSensor(foundSensor || null);

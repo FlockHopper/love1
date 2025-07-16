@@ -38,6 +38,20 @@ export function Dashboard({ onLogout, userEmail }: DashboardProps) {
   const [filterStatus, setFilterStatus] = useState<"all" | "online" | "offline" | "warning">("all");
   const [isRefreshing, setIsRefreshing] = useState(false);
 
+  // Verificar se ainda está autenticado
+  useEffect(() => {
+    const checkAuth = () => {
+      const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+      if (!isAuthenticated) {
+        onLogout();
+      }
+    };
+    
+    // Verificar a cada 30 segundos
+    const interval = setInterval(checkAuth, 30000);
+    return () => clearInterval(interval);
+  }, [onLogout]);
+
   // Auto-refresh data every 30 seconds
   useEffect(() => {
     const interval = setInterval(() => {
